@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+mybatis:
+#  config-location: classpath:mybatis/mybatis.cfg.xml # mybatis配置文件所在路径
+#  type-aliases-package: com.kudingtang.springcloud.model # 所有Entity别名类所在包
+#  mapper-locations: classpath:mybatis/mapper/**/*.xml # mapper映射
+  configuration:
+#    开启驼峰命名方式
+    map-underscore-to-camel-case: true
+
+#配置数据源
+spring:
+  application:
+    name: springcloud-product #指定服务名称，
+  datasource:
+    username: user
+    password: Chen8532599
+    url: jdbc:mysql://rm-wz9iho9gxn8n6c5x7io.mysql.rds.aliyuncs.com:3306/user?serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    指定数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    #    配置druid数据源所使用的的参数
+    dbcp2:
+      min-idle: 5 # 数据库连接池的最小维持连接数
+      initial-size: 5 # 初始化连接数
+      max-total: 5 # 最大连接数
+      max-wait-millis: 150 # 等待连接获取的最大超时时间
+    #   数据源其他配置, DataSourceProperties中没有相关属性,默认无法绑定
+    initialSize: 8
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,logback
+    maxPoolPreparedStatementPerConnectionSize: 25
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+logging:
+  level:
+    com.kudingtang.springcloud.mapper: debug
+
+#eureka
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+#      defaultZone: http://localhost:6001/eureka
+      defaultZone: http://eureka6001.com:6001/eureka/,http://eureka6002.com:6002/eureka/
+  instance:
+    prefer-ip-address: true
+    instanceId: ${spring.application.name}:${server.port}
